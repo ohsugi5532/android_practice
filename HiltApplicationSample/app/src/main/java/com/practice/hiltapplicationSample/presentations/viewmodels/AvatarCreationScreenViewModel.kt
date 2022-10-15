@@ -23,27 +23,28 @@ class AvatarCreationScreenViewModel @Inject constructor(
     private val saveAvatarUseCase: SaveAvatarUseCase,
 ): ViewModel() {
     var avatarState by mutableStateOf<Avatar?>(null)
-        private set
 
     fun createAvatar(name: String) {
-        if (name.isEmpty()) {
-            return
-        }
-        viewModelScope.launch {
-            withContext(Dispatchers.Default) {
-                avatarState = createAvatarUseCase.invoke(name)
+        if (name.isNotEmpty()) {
+            viewModelScope.launch {
+                withContext(Dispatchers.Default) {
+                    avatarState = createAvatarUseCase.invoke(name)
+                }
             }
         }
     }
 
-    fun saveAvatar(avatar: Avatar) {
-        if (avatar.name.isEmpty() || avatar.svg.isEmpty()) {
-            return
-        }
-        viewModelScope.launch {
-            saveAvatarUseCase.invoke(avatar)
+    fun saveAvatar() {
+        avatarState?.let { avatar ->
+            if (avatar.name.isEmpty() || avatar.svg.isEmpty()) {
+                return
+            }
 
-            avatarState = null
+            viewModelScope.launch {
+                saveAvatarUseCase.invoke(avatar)
+
+                avatarState = null
+            }
         }
     }
 }

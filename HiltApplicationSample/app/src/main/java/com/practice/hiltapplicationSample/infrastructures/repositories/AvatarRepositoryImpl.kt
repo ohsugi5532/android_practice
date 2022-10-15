@@ -1,5 +1,6 @@
 package com.practice.hiltapplicationSample.infrastructures.repositories
 
+import android.content.Context
 import android.util.Log
 import androidx.room.Room
 import com.practice.hiltapplicationSample.MainApplication
@@ -7,6 +8,8 @@ import com.practice.hiltapplicationSample.domains.entities.Avatar
 import com.practice.hiltapplicationSample.domains.repositories.AvatarRepository
 import com.practice.hiltapplicationSample.infrastructures.AppDatabase
 import com.practice.hiltapplicationSample.infrastructures.dao.JoeSchmoe
+import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.lang.Exception
@@ -15,9 +18,10 @@ import javax.inject.Inject
 private const val TAG = "JoeSchmoeRepositoryImpl"
 private const val API_BASE = "https://joeschmoe.io/api/v1/"
 
-class AvatarRepositoryImpl @Inject constructor(): AvatarRepository {
+class AvatarRepositoryImpl @Inject constructor(
+    @ApplicationContext private val context: Context,
+): AvatarRepository {
     private val client: OkHttpClient = OkHttpClient()
-    private val context = MainApplication.getApplication().applicationContext
     private val db = Room.databaseBuilder(
         context,
         AppDatabase::class.java,

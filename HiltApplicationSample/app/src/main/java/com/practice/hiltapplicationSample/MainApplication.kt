@@ -6,10 +6,4 @@ import com.practice.hiltapplicationSample.infrastructures.AppDatabase
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class MainApplication: Application() {
-    companion object {
-        fun getApplication(): MainApplication {
-            return this.getApplication()
-        }
-    }
-}
+class MainApplication: Application()
