@@ -3,11 +3,11 @@ package com.practice.hiltapplicationSample.domains.repositories
 import com.practice.hiltapplicationSample.domains.entities.Avatar
 
 interface AvatarRepository {
-    fun createAvatar(name: String): Result<Avatar>
+    suspend fun createAvatar(name: String): Result<Avatar>
 
-    fun saveAvatar(avatar: Avatar)
+    suspend fun saveAvatar(avatar: Avatar): Result<Unit>
 
-    fun findAllAvatar(): List<Avatar>
+    suspend fun findAllAvatar(): Result<List<Avatar>>
 
-    fun deleteAvatar(avatar: Avatar)
+    suspend fun deleteAvatar(avatar: Avatar): Result<Unit>
 }

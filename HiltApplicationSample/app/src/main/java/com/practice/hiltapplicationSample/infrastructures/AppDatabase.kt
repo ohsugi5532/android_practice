@@ -10,3 +10,4 @@ import com.practice.hiltapplicationSample.infrastructures.dao.JoeSchmoeDao
 abstract class AppDatabase: RoomDatabase() {
     abstract fun joeSchmoeDao(): JoeSchmoeDao
 }
+

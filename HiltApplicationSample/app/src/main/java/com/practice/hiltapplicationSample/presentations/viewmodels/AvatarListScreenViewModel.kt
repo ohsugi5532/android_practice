@@ -25,7 +25,7 @@ class AvatarListScreenViewModel @Inject constructor(
         viewModelScope.launch {
             isLoading.value = true
 
-            avatarListState = listAvatarUseCase.invoke().toMutableStateList()
+            avatarListState = listAvatarUseCase.invoke().getOrNull()?.toMutableStateList()!!
 
             isLoading.value = false
         }

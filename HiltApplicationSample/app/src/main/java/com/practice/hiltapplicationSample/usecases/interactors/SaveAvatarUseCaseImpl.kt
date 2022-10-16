@@ -8,7 +8,7 @@ import javax.inject.Inject
 class SaveAvatarUseCaseImpl @Inject constructor(
     private val repository: AvatarRepository
 ): SaveAvatarUseCase {
-    override fun invoke(avatar: Avatar) {
-        repository.saveAvatar(avatar)
+    override suspend fun invoke(avatar: Avatar): Result<Unit> {
+       return repository.saveAvatar(avatar)
     }
 }

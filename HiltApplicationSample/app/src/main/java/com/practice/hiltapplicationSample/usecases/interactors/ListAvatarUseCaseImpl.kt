@@ -8,7 +8,7 @@ import javax.inject.Inject
 class ListAvatarUseCaseImpl @Inject constructor(
     private val repository: AvatarRepository
 ) : ListAvatarUseCase {
-    override fun invoke(): List<Avatar> {
+    override suspend fun invoke(): Result<List<Avatar>> {
         return repository.findAllAvatar()
     }
 }

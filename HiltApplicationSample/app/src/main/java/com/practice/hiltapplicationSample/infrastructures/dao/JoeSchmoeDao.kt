@@ -17,11 +17,11 @@ data class JoeSchmoe (
 @Dao
 interface JoeSchmoeDao {
     @Query("SELECT * FROM joe_schmoe")
-    fun findAll(): List<JoeSchmoe>
+    suspend fun findAll(): List<JoeSchmoe>
 
     @Insert
-    fun insert(joeSchmoe: JoeSchmoe)
+    suspend fun insert(joeSchmoe: JoeSchmoe)
 
     @Delete
-    fun delete(joeSchmoe: JoeSchmoe)
+    suspend fun delete(joeSchmoe: JoeSchmoe)
 }

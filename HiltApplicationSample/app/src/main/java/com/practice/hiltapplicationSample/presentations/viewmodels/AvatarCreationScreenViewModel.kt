@@ -28,7 +28,7 @@ class AvatarCreationScreenViewModel @Inject constructor(
         if (name.isNotEmpty()) {
             viewModelScope.launch {
                 withContext(Dispatchers.Default) {
-                    avatarState = createAvatarUseCase.invoke(name)
+                    avatarState = createAvatarUseCase.invoke(name).getOrNull()
                 }
             }
         }
