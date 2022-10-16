@@ -1,16 +1,13 @@
 package com.practice.hiltapplicationSample.presentations.viewmodels
 
+
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practice.hiltapplicationSample.domains.entities.Avatar
-import com.practice.hiltapplicationSample.usecases.inputports.CreateAvatarUseCase
 import com.practice.hiltapplicationSample.usecases.inputports.SaveAvatarUseCase
-import com.practice.hiltapplicationSample.usecases.interactors.CreateAvatarUseCaseImpl
-import com.practice.hiltapplicationSample.usecases.interactors.SaveAvatarUseCaseImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,32 +16,26 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AvatarCreationScreenViewModel @Inject constructor(
-    private val createAvatarUseCase: CreateAvatarUseCase,
     private val saveAvatarUseCase: SaveAvatarUseCase,
 ): ViewModel() {
-    var avatarState by mutableStateOf<Avatar?>(null)
+    private val baseUri = "https://joeschmoe.io/api/v1"
 
-    fun createAvatar(name: String) {
-        if (name.isNotEmpty()) {
-            viewModelScope.launch {
-                withContext(Dispatchers.Default) {
-                    avatarState = createAvatarUseCase.invoke(name).getOrNull()
-                }
-            }
+    fun generateAvatarUrl(name: String): String {
+        return if (name.isNotEmpty()) {
+            "$baseUri/$name"
+        } else {
+            ""
         }
     }
 
-    fun saveAvatar() {
-        avatarState?.let { avatar ->
-            if (avatar.name.isEmpty() || avatar.svg.isEmpty()) {
-                return
-            }
+    fun saveAvatar(name: String, url: String) {
+        if (name.isEmpty() || url.isEmpty()) {
+            return
+        }
 
-            viewModelScope.launch {
-                saveAvatarUseCase.invoke(avatar)
-
-                avatarState = null
-            }
+        viewModelScope.launch {
+            val avatar = Avatar(name = name, url = url)
+            saveAvatarUseCase.invoke(avatar)
         }
     }
 }

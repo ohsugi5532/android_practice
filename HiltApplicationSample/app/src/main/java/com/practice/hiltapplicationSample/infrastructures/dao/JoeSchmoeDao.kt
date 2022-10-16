@@ -11,7 +11,7 @@ import androidx.room.Query
 @Entity(tableName = "joe_schmoe")
 data class JoeSchmoe (
     @PrimaryKey val name: String,
-    @ColumnInfo(name = "svg") val svg: String,
+    @ColumnInfo(name = "url") val url: String,
 )
 
 @Dao
@@ -21,7 +21,4 @@ interface JoeSchmoeDao {
 
     @Insert
     suspend fun insert(joeSchmoe: JoeSchmoe)
-
-    @Delete
-    suspend fun delete(joeSchmoe: JoeSchmoe)
 }
