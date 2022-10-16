@@ -8,9 +8,6 @@ import com.practice.hiltapplicationSample.domains.repositories.AvatarRepository
 import com.practice.hiltapplicationSample.infrastructures.AppDatabase
 import com.practice.hiltapplicationSample.infrastructures.dao.JoeSchmoe
 import dagger.hilt.android.qualifiers.ApplicationContext
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import java.lang.Exception
 import javax.inject.Inject
 
 private const val TAG = "JoeSchmoeRepositoryImpl"
@@ -18,7 +15,6 @@ private const val TAG = "JoeSchmoeRepositoryImpl"
 class AvatarRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
 ): AvatarRepository {
-    private val client: OkHttpClient = OkHttpClient()
 
     private fun connectDB(): AppDatabase {
         return Room.databaseBuilder(
@@ -30,6 +26,8 @@ class AvatarRepositoryImpl @Inject constructor(
 
 
     override suspend fun findAllAvatar(): Result<List<Avatar>> {
+        Log.d(TAG, "started load avatars.")
+
         return kotlin.runCatching {
             val db = connectDB()
             db.joeSchmoeDao().findAll().map {
@@ -42,6 +40,8 @@ class AvatarRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveAvatar(avatar: Avatar) : Result<Unit> {
+        Log.d(TAG, "started saving a avatar.")
+
         return kotlin.runCatching {
             val db = connectDB()
             val joeSchmoe = JoeSchmoe(

@@ -11,8 +11,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,65 +47,76 @@ fun AvatarCreationScreen(
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    Scaffold {
-        Column(modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-            OutlinedTextField(
-                value = name,
-                placeholder = {
-                    Text(text = "Input name")
-                },
-                onValueChange = {
-                    name = it
-                },
-                modifier = Modifier.padding(20.dp)
-            )
-            Row {
-                Button(
-                    content = {
-                        Text(text = "Generate")
+    Surface {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(text = "Create")
                     },
-                    onClick = {
-                        url = viewModel.generateAvatarUrl(name)
-                        keyboardController?.hide()
-                    }
                 )
-                Spacer(modifier = Modifier.width(16.dp))
-                Button(
-                    enabled = url.isNotEmpty(),
-                    content = {
-                        Text(text = "Save")
-                    },
-                    onClick = {
-                        viewModel.saveAvatar(
-                            name = name,
-                            url = url,
+            },
+            content = {
+                Column(modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    OutlinedTextField(
+                        value = name,
+                        placeholder = {
+                            Text(text = "Input name")
+                        },
+                        onValueChange = {
+                            name = it
+                        },
+                        modifier = Modifier.padding(20.dp)
+                    )
+                    Row {
+                        Button(
+                            content = {
+                                Text(text = "Generate")
+                            },
+                            onClick = {
+                                url = viewModel.generateAvatarUrl(name)
+                                keyboardController?.hide()
+                            }
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Button(
+                            enabled = url.isNotEmpty(),
+                            content = {
+                                Text(text = "Save")
+                            },
+                            onClick = {
+                                viewModel.saveAvatar(
+                                    name = name,
+                                    url = url,
+                                )
+                            }
                         )
                     }
-                )
-            }
-            TextButton(
-                content = {
-                    Text(text = "Go to Avatar list")
-                },
-                onClick = {
-                    navigateToList()
+                    TextButton(
+                        content = {
+                            Text(text = "Go to Avatar list")
+                        },
+                        onClick = {
+                            navigateToList()
+                        }
+                    )
+                    if (url.isNotEmpty()) {
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(url)
+                                .decoderFactory(SvgDecoder.Factory())
+                                .crossfade(true)
+                                .build(),
+                            contentDescription = "avatar",
+                            contentScale = ContentScale.Inside,
+                            modifier = Modifier.clip(CircleShape)
+                        )
+                    }
                 }
-            )
-            if (url.isNotEmpty()) {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(url)
-                        .decoderFactory(SvgDecoder.Factory())
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = "avatar",
-                    contentScale = ContentScale.Inside,
-                    modifier = Modifier.clip(CircleShape)
-                )
             }
-        }
+        )
     }
 }

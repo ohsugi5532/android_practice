@@ -1,7 +1,9 @@
 package com.practice.hiltapplicationSample.presentations.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,8 +17,9 @@ import javax.inject.Inject
 class AvatarListScreenViewModel @Inject constructor(
     private val listAvatarUseCase: ListAvatarUseCase
 ): ViewModel() {
-    var avatarListState = mutableStateListOf<Avatar>()
-        private set
+    private var list = mutableStateListOf<Avatar>()
+    val avatars: List<Avatar>
+        get() = list
 
     var isLoading = mutableStateOf(false)
         private set
@@ -25,7 +28,8 @@ class AvatarListScreenViewModel @Inject constructor(
         viewModelScope.launch {
             isLoading.value = true
 
-            avatarListState = listAvatarUseCase.invoke().getOrNull()?.toMutableStateList()!!
+            val snapshotStateList = listAvatarUseCase.invoke().getOrNull() ?: SnapshotStateList<Avatar>()
+            list = snapshotStateList.toMutableStateList()
 
             isLoading.value = false
         }
